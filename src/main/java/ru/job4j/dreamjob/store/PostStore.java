@@ -28,4 +28,12 @@ public class PostStore {
     public Post add(Post post) {
         return posts.put(post.getId(), post);
     }
+
+    public Post findById(int id) {
+        return posts.get(id);
+    }
+
+    public Post update(Post post) {
+        return add(post);
+    }
 }
