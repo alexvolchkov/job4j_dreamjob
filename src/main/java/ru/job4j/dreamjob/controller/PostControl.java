@@ -27,7 +27,6 @@ public class PostControl {
 
     @PostMapping("/createPost")
     public String createPost(@ModelAttribute Post post) {
-        post.setId(store.getAndIncrement());
         store.add(post);
         return "redirect:/posts";
     }

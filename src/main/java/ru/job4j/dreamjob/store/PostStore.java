@@ -11,15 +11,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PostStore {
     private static final PostStore INST = new PostStore();
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
-    private final AtomicInteger counter = new AtomicInteger(1);
+    private final AtomicInteger counter = new AtomicInteger(4);
 
     public PostStore() {
-        int id = counter.getAndIncrement();
-        posts.put(id, new Post(id, "Junior Java Job", "Junior Java Job", LocalDate.now()));
-        id = counter.getAndIncrement();
-        posts.put(id, new Post(id, "Middle Java Job", "Middle Java Job", LocalDate.now()));
-        id = counter.getAndIncrement();
-        posts.put(id, new Post(id, "Senior Java Job", "Senior Java Job", LocalDate.now()));
+        posts.put(1, new Post(1, "Junior Java Job", "Junior Java Job", LocalDate.now()));
+        posts.put(2, new Post(2, "Middle Java Job", "Middle Java Job", LocalDate.now()));
+        posts.put(3, new Post(3, "Senior Java Job", "Senior Java Job", LocalDate.now()));
     }
 
     public static PostStore instOf() {
@@ -31,6 +28,7 @@ public class PostStore {
     }
 
     public Post add(Post post) {
+        post.setId(counter.getAndIncrement());
         return posts.put(post.getId(), post);
     }
 
@@ -40,9 +38,5 @@ public class PostStore {
 
     public Post update(Post post) {
         return add(post);
-    }
-
-    public int getAndIncrement() {
-        return counter.getAndIncrement();
     }
 }
