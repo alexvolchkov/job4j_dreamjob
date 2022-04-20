@@ -36,7 +36,7 @@ public class PostStore {
         return posts.get(id);
     }
 
-    public Post update(Post post) {
-        return add(post);
+    public boolean update(Post post) {
+        return posts.replace(post.getId(), post) != null;
     }
 }
