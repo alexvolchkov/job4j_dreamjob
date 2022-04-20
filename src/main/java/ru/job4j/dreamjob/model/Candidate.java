@@ -24,6 +24,13 @@ public class Candidate {
         this.created = created;
     }
 
+    public Candidate(Candidate candidate) {
+        this.id = candidate.getId();
+        this.name = candidate.getName();
+        this.desc = candidate.getDesc();
+        this.created = candidate.getCreated();
+    }
+
     public int getId() {
         return id;
     }

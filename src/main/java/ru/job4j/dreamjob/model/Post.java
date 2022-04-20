@@ -24,6 +24,13 @@ public class Post {
         this.created = created;
     }
 
+    public Post(Post post) {
+        this.id = post.getId();
+        this.name = post.getName();
+        this.description = post.getDescription();
+        this.created = post.getCreated();
+    }
+
     public int getId() {
         return id;
     }
