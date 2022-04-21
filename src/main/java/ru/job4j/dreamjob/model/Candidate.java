@@ -8,6 +8,7 @@ public class Candidate {
     private String name;
     private String desc;
     private LocalDate created;
+    private byte[] photo = new byte[0];
 
     public Candidate() {
     }
@@ -29,6 +30,7 @@ public class Candidate {
         this.name = candidate.getName();
         this.desc = candidate.getDesc();
         this.created = candidate.getCreated();
+        this.photo = candidate.getPhoto();
     }
 
     public int getId() {
@@ -61,6 +63,14 @@ public class Candidate {
 
     public void setCreated(LocalDate created) {
         this.created = created;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 
     @Override
