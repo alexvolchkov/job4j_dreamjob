@@ -42,11 +42,13 @@ public final class PostControl {
     @GetMapping("/formUpdatePost/{postId}")
     public String formUpdatePost(Model model, @PathVariable("postId") int id) {
         model.addAttribute("post", postService.findById(id));
+        model.addAttribute("cities", cityService.getAllCities());
         return "updatePost";
     }
 
     @PostMapping("/updatePost")
-    public String updatePost(@ModelAttribute Post post) {
+    public String updatePost(@ModelAttribute Post post, @RequestParam("city.id") int id) {
+        post.setCity(cityService.findById(id));
         postService.update(post);
         return "redirect:/posts";
     }
