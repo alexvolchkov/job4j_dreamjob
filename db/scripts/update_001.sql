@@ -12,6 +12,6 @@ CREATE TABLE candidate (
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   name TEXT,
-  email TEXT UNIQUE,
+  email varchar UNIQUE,
   password TEXT
 );
