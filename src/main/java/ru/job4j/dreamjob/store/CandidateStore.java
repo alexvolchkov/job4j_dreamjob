@@ -32,7 +32,7 @@ public final class CandidateStore {
     }
 
     public Candidate findById(int id) {
-        return new Candidate(candidates.get(id));
+        return candidates.get(id);
     }
 
     public boolean update(Candidate candidate) {
