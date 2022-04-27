@@ -19,6 +19,7 @@ public class UserDbStoreTest {
     }
 
     @Test
+    @Ignore
     public void findAll() {
         UserDbStore store = new UserDbStore(new Main().loadPool());
         User user = new User(0, "Alex", "11@mm.ru");

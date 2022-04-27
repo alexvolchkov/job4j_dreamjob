@@ -6,7 +6,10 @@ CREATE TABLE post (
 
 CREATE TABLE candidate (
     id SERIAL PRIMARY KEY,
-    name TEXT
+    name TEXT,
+    description TEXT,
+    created TIMESTAMP,
+    photo BYTEA
 );
 
 CREATE TABLE users (

@@ -4,10 +4,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.stereotype.Repository;
 import ru.job4j.dreamjob.model.Candidate;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,10 +34,14 @@ public class CandidateDbStore {
 
     public Candidate add(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate (name) VALUES (?)",
+             PreparedStatement ps = cn.prepareStatement(
+                     "INSERT INTO candidate (name, description, created, photo) VALUES (?, ?, ?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
+            ps.setString(2, candidate.getDescription());
+            ps.setTimestamp(3, Timestamp.valueOf(candidate.getCreated()));
+            ps.setBytes(4, candidate.getPhoto());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -56,10 +57,14 @@ public class CandidateDbStore {
     public boolean update(Candidate candidate) {
         boolean rsl = true;
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("UPDATE candidate SET name = ? WHERE id = ?")
+             PreparedStatement ps =  cn.prepareStatement(
+                     "UPDATE candidate SET name = ?, description = ?, created = ?, photo = ? WHERE id = ?")
         ) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getId());
+            ps.setString(2, candidate.getDescription());
+            ps.setTimestamp(3, Timestamp.valueOf(candidate.getCreated()));
+            ps.setBytes(4, candidate.getPhoto());
+            ps.setInt(5, candidate.getId());
             ps.execute();
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,6 +92,9 @@ public class CandidateDbStore {
     private Candidate createCandidateFromDB(ResultSet it) throws SQLException {
         return new Candidate(
                 it.getInt("id"),
-                it.getString("name"));
+                it.getString("name"),
+                it.getString("description"),
+               it.getTimestamp("created").toLocalDateTime(),
+                it.getBytes("photo"));
     }
 }

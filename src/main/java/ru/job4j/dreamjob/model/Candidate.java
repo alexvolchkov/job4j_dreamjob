@@ -1,13 +1,13 @@
 package ru.job4j.dreamjob.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Candidate {
     private int id;
     private String name;
-    private String desc;
-    private LocalDate created;
+    private String description;
+    private LocalDateTime created = LocalDateTime.now();
     private byte[] photo = new byte[0];
 
     public Candidate() {
@@ -18,19 +18,19 @@ public class Candidate {
         this.name = name;
     }
 
-    public Candidate(int id, String name, String desc, LocalDate created) {
+    public Candidate(int id, String name, String description, LocalDateTime created) {
         this.id = id;
         this.name = name;
-        this.desc = desc;
+        this.description = description;
         this.created = created;
     }
 
-    public Candidate(Candidate candidate) {
-        this.id = candidate.getId();
-        this.name = candidate.getName();
-        this.desc = candidate.getDesc();
-        this.created = candidate.getCreated();
-        this.photo = candidate.getPhoto();
+    public Candidate(int id, String name, String description, LocalDateTime created, byte[] photo) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.created = created;
+        this.photo = photo;
     }
 
     public int getId() {
@@ -49,19 +49,19 @@ public class Candidate {
         this.name = name;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public LocalDate getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDate created) {
+    public void setCreated(LocalDateTime created) {
         this.created = created;
     }
 
