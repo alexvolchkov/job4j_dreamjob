@@ -5,10 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.service.CityService;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +37,15 @@ public class PostDbStore {
 
     public Post add(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO post(name, city_id) VALUES (?, ?)",
+             PreparedStatement ps = cn.prepareStatement(
+                     "INSERT INTO post(name, description, created, visible, city_id) VALUES (?, ?, ?, ?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, post.getName());
-            ps.setInt(2, post.getCity().getId());
+            ps.setString(2, post.getDescription());
+            ps.setTimestamp(3, Timestamp.valueOf(post.getCreated()));
+            ps.setBoolean(4, post.isVisible());
+            ps.setInt(5, post.getCity().getId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -60,11 +61,17 @@ public class PostDbStore {
     public boolean update(Post post) {
         boolean rsl = false;
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("UPDATE post SET name = ?, city_id = ? WHERE id = ?")
+             PreparedStatement ps =  cn.prepareStatement(
+                     "UPDATE post "
+                             + "SET name = ?, description = ?, created = ?, visible = ?, city_id = ? "
+                             + "WHERE id = ?")
         ) {
             ps.setString(1, post.getName());
-            ps.setInt(2, post.getCity().getId());
-            ps.setInt(3, post.getId());
+            ps.setString(2, post.getDescription());
+            ps.setTimestamp(3, Timestamp.valueOf(post.getCreated()));
+            ps.setBoolean(4, post.isVisible());
+            ps.setInt(5, post.getCity().getId());
+            ps.setInt(6, post.getId());
             rsl = ps.execute();
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,6 +99,9 @@ public class PostDbStore {
         return new Post(
                 it.getInt("id"),
                 it.getString("name"),
+                it.getString("description"),
+                it.getTimestamp("created").toLocalDateTime(),
+                it.getBoolean("visible"),
                 cityService.findById(it.getInt("city_id")));
     }
 }

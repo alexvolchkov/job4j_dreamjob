@@ -1,5 +1,6 @@
 package ru.job4j.dreamjob.store;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import ru.job4j.dreamjob.Main;
 import ru.job4j.dreamjob.model.Candidate;
@@ -11,6 +12,7 @@ import static org.hamcrest.Matchers.is;
 public class CandidateDbStoreTest {
 
     @Test
+    @Ignore
     public void whenCreatePost() {
         CandidateDbStore store = new CandidateDbStore(new Main().loadPool());
         Candidate candidate = new Candidate(0, "Java Job");

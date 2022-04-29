@@ -1,20 +1,23 @@
 CREATE TABLE post (
     id SERIAL PRIMARY KEY,
-    name TEXT,
+    name varchar,
+    description varchar,
+    created TIMESTAMP,
+    visible BOOLEAN,
     city_id int
 );
 
 CREATE TABLE candidate (
     id SERIAL PRIMARY KEY,
-    name TEXT,
-    description TEXT,
+    name varchar,
+    description varchar,
     created TIMESTAMP,
     photo BYTEA
 );
 
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  name TEXT,
+  name varchar,
   email varchar UNIQUE,
-  password TEXT
+  password varchar
 );
