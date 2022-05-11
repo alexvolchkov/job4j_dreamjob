@@ -12,7 +12,6 @@ import static org.hamcrest.Matchers.is;
 public class CandidateDbStoreTest {
 
     @Test
-    @Ignore
     public void whenCreatePost() {
         CandidateDbStore store = new CandidateDbStore(new Main().loadPool());
         Candidate candidate = new Candidate(0, "Java Job");

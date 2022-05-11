@@ -1,23 +1,23 @@
-CREATE TABLE post (
+CREATE TABLE if not exists post (
     id SERIAL PRIMARY KEY,
-    name varchar,
-    description varchar,
+    name TEXT,
+    description TEXT,
     created TIMESTAMP,
     visible BOOLEAN,
     city_id int
 );
 
-CREATE TABLE candidate (
+CREATE TABLE if not exists candidate (
     id SERIAL PRIMARY KEY,
-    name varchar,
-    description varchar,
+    name TEXT,
+    description TEXT,
     created TIMESTAMP,
     photo BYTEA
 );
 
-CREATE TABLE users (
+CREATE TABLE if not exists users (
   id SERIAL PRIMARY KEY,
-  name varchar,
+  name TEXT,
   email varchar UNIQUE,
-  password varchar
+  password TEXT
 );
