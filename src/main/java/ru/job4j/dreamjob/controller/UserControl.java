@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.job4j.dreamjob.model.User;
 import ru.job4j.dreamjob.service.UserService;
 
+import java.util.Optional;
+
 @ThreadSafe
 @Controller
 public final class UserControl {
@@ -24,13 +26,27 @@ public final class UserControl {
 
     @GetMapping("/formAddUser")
     public String addUser(Model model) {
-        return "addUser";
+        return "registration";
     }
 
-    @PostMapping("/createUser")
-    public String createUser(@ModelAttribute User user) {
-        userService.add(user);
-        return "redirect:/users";
+    @PostMapping("/registration")
+    public String registration(Model model, @ModelAttribute User user) {
+        Optional<User> regUser = userService.add(user);
+        if (regUser.isEmpty()) {
+            model.addAttribute("message", "Пользователь с такой почтой уже существует");
+            return "redirect:/fail";
+        }
+        return "redirect:/success";
+    }
+
+    @GetMapping("/success")
+    public String success() {
+        return "success";
+    }
+
+    @GetMapping("/fail")
+    public String fail() {
+        return "fail";
     }
 
     @GetMapping("/formUpdateUser/{userId}")

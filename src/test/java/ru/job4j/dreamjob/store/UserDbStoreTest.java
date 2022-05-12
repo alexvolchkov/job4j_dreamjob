@@ -1,6 +1,6 @@
 package ru.job4j.dreamjob.store;
 
-import org.junit.Ignore;
+import org.junit.After;
 import org.junit.Test;
 import ru.job4j.dreamjob.Main;
 import ru.job4j.dreamjob.model.User;
@@ -9,37 +9,76 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
 
 public class UserDbStoreTest {
 
-    @Test
-    @Ignore
-    public void whenCreateUser() {
-
-    }
-
-    @Test
-    @Ignore
-    public void findAll() {
+    @After
+    public void CleanDB() {
         UserDbStore store = new UserDbStore(new Main().loadPool());
-        User user = new User(0, "Alex", "11@mm.ru");
+        store.deleteAll();
+    }
+
+    @Test
+    public void whenCreateUser() {
+        UserDbStore store = new UserDbStore(new Main().loadPool());
+        User user = new User(0, "User", "email");
         store.add(user);
-        System.out.println(user.getName());
-        System.out.println(user.getId());
-        List<User> users = store.findAll();
-        for (User user1 : users) {
-            System.out.println(user1.getId());
-        }
-
+        User userInDb = store.findById(user.getId());
+        assertThat(userInDb.getName(), is(user.getName()));
     }
 
     @Test
-    @Ignore
-    public void add() {
+    public void whenNotCreateUser() {
+        UserDbStore store = new UserDbStore(new Main().loadPool());
+        User user1 = new User(0, "User1", "email");
+        User user2 = new User(0, "User2", "email");
+        store.add(user1);
+        assertTrue(store.add(user2).isEmpty());
     }
 
     @Test
-    @Ignore
-    public void update() {
+    public void whenUpdateUser() {
+        UserDbStore store = new UserDbStore(new Main().loadPool());
+        User user = new User(0, "User", "email");
+        store.add(user);
+        user.setName("Update name");
+        store.update(user);
+        User userInDb = store.findById(user.getId());
+        assertThat(userInDb.getName(), is(user.getName()));
+    }
+
+    @Test
+    public void whenFindByIdUser() {
+        UserDbStore store = new UserDbStore(new Main().loadPool());
+        User user1 = new User(0, "User1", "email1");
+        User user2 = new User(0, "User2", "email2");
+        store.add(user1);
+        store.add(user2);
+        User userInDb = store.findById(user1.getId());
+        assertThat(userInDb.getName(), is(user1.getName()));
+    }
+
+    @Test
+    public void whenDeleteAll() {
+        UserDbStore store = new UserDbStore(new Main().loadPool());
+        User user1 = new User(0, "User1", "email1");
+        User user2 = new User(0, "User2", "email2");
+        store.add(user1);
+        store.add(user2);
+        store.deleteAll();
+        assertThat(store.findAll().size(), is(0));
+    }
+
+    @Test
+    public void whenFindAllPost() {
+        UserDbStore store = new UserDbStore(new Main().loadPool());
+        User user1 = new User(0, "User1", "email1");
+        User user2 = new User(0, "User2", "email2");
+        store.add(user1);
+        store.add(user2);
+        List<User> rsl = store.findAll();
+        assertThat(rsl.size(), is(2));
+        assertTrue(rsl.containsAll(List.of(user1, user2)));
     }
 }

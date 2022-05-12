@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserDbStore {
@@ -35,7 +36,8 @@ public class UserDbStore {
         return users;
     }
 
-    public User add(User user) {
+    public Optional<User> add(User user) {
+        Optional<User> rsl = Optional.empty();
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
                      "INSERT INTO users(name, email, password) VALUES (?, ?, ?)",
@@ -50,10 +52,11 @@ public class UserDbStore {
                     user.setId(id.getInt(1));
                 }
             }
+            rsl = Optional.of(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return user;
+        return rsl;
     }
 
     public boolean update(User user) {
@@ -95,5 +98,15 @@ public class UserDbStore {
                 it.getString("name"),
                 it.getString("email"),
                 it.getString("password"));
+    }
+
+    public void deleteAll() {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("DELETE FROM users")
+        ) {
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

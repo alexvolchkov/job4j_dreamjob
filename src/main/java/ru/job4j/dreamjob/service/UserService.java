@@ -6,6 +6,7 @@ import ru.job4j.dreamjob.model.User;
 import ru.job4j.dreamjob.store.UserDbStore;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @ThreadSafe
 @Service
@@ -20,7 +21,7 @@ public final class UserService {
         return store.findAll();
     }
 
-    public User add(User user) {
+    public Optional<User> add(User user) {
         return store.add(user);
     }
 
