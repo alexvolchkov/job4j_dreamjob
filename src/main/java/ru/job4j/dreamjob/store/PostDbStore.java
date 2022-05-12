@@ -104,4 +104,14 @@ public class PostDbStore {
                 it.getBoolean("visible"),
                 cityService.findById(it.getInt("city_id")));
     }
+
+    public void deleteAll() {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("DELETE FROM post")
+        ) {
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

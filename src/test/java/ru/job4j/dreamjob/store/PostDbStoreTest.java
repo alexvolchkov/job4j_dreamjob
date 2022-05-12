@@ -1,6 +1,6 @@
 package ru.job4j.dreamjob.store;
 
-import org.junit.Ignore;
+import org.junit.After;
 import org.junit.Test;
 import ru.job4j.dreamjob.Main;
 import ru.job4j.dreamjob.model.Post;
@@ -13,6 +13,13 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
 
 public class PostDbStoreTest {
+
+    @After
+    public void CleanDB() {
+        CityService cityService = new CityService();
+        PostDbStore store = new PostDbStore(new Main().loadPool(), cityService);
+        store.deleteAll();
+    }
 
     @Test
     public void whenCreatePost() {
@@ -49,7 +56,18 @@ public class PostDbStoreTest {
     }
 
     @Test
-    @Ignore
+    public void whenDeleteAll() {
+        CityService cityService = new CityService();
+        PostDbStore store = new PostDbStore(new Main().loadPool(), cityService);
+        Post post1 = new Post(0, "Post1", cityService.findById(1));
+        Post post2 = new Post(1, "Post2", cityService.findById(1));
+        store.add(post1);
+        store.add(post2);
+        store.deleteAll();
+        assertThat(store.findAll().size(), is(0));
+    }
+
+    @Test
     public void whenFindAllPost() {
         CityService cityService = new CityService();
         PostDbStore store = new PostDbStore(new Main().loadPool(), cityService);
