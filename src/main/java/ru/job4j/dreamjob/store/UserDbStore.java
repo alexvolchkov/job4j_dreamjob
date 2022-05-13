@@ -92,6 +92,23 @@ public class UserDbStore {
         return null;
     }
 
+    public Optional<User> findUserByEmailAndPwd(String email, String password) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM users WHERE email = ? AND password = ?")
+        ) {
+            ps.setString(1, email);
+            ps.setString(2, password);
+            try (ResultSet it = ps.executeQuery()) {
+                if (it.next()) {
+                    return Optional.of(createUserFromDB(it));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
     private User createUserFromDB(ResultSet it) throws SQLException {
         return new User(
                 it.getInt("id"),

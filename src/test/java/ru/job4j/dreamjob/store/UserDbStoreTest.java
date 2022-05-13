@@ -81,4 +81,27 @@ public class UserDbStoreTest {
         assertThat(rsl.size(), is(2));
         assertTrue(rsl.containsAll(List.of(user1, user2)));
     }
+
+    @Test
+    public void whenFindUserByEmailAndPwd() {
+        UserDbStore store = new UserDbStore(new Main().loadPool());
+        User user1 = new User(0, "User1", "email1", "12");
+        User user2 = new User(0, "User2", "email2", "34");
+        store.add(user1);
+        store.add(user2);
+        User userInDb = store.findUserByEmailAndPwd(user1.getEmail(), user1.getPassword()).get();
+        assertThat(userInDb.getName(), is(user1.getName()));
+    }
+
+    @Test
+    public void whenNotFindUserByEmailAndPwd() {
+        UserDbStore store = new UserDbStore(new Main().loadPool());
+        User user1 = new User(0, "User1", "email1", "12");
+        User user2 = new User(0, "User2", "email2", "34");
+        store.add(user1);
+        store.add(user2);
+        assertTrue(store.findUserByEmailAndPwd(user1.getEmail(), "11").isEmpty());
+        assertTrue(store.findUserByEmailAndPwd("email", user1.getPassword()).isEmpty());
+        assertTrue(store.findUserByEmailAndPwd("email", "11").isEmpty());
+    }
 }
